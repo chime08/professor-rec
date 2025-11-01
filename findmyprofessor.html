@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find My Professor - BMCC AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+            background: #000;
+            color: white;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 174, 239, 0.2);
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00AEEF 0%, #0066CC 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #00AEEF;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #00AEEF 0%, #0066CC 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 174, 239, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #001a33 0%, #000 100%);
+            padding: 100px 20px 50px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(0, 174, 239, 0.3);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(0, 102, 204, 0.3);
+            bottom: -100px;
+            right: -100px;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 1000px;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bmcc-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(0, 174, 239, 0.1);
+            border: 1px solid rgba(0, 174, 239, 0.3);
+            border-radius: 20px;
+            color: #00AEEF;
+            font-weight: 600;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .hero h1 {
+            font-size: 5em;
+            font-weight: 900;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #fff 0%, #00AEEF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 .ai-text {
+            background: linear-gradient(135deg, #00AEEF 0%, #0066CC 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 50px;
+            line-height: 1.6;
+        }
+
+        /* Interactive Demo Box */
+        .demo-box {
+            max-width: 700px;
+            margin: 0 auto 40px;
+            background: rgba(0, 174, 239, 0.05);
+            border: 2px solid rgba(0, 174, 239, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .demo-box:hover {
+            border-color: rgba(0, 174, 239, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 174, 239, 0.2);
+        }
+
+        .demo-label {
+            color: #00AEEF;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chat-input-demo {
+            width: 100%;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1em;
+            resize: none;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .chat-input-demo:focus {
+            outline: none;
+            border-color: #00AEEF;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .chat-input-demo::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .example-prompts {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .prompt-chip {
+            padding: 8px 16px;
+            background: rgba(0, 174, 239, 0.1);
+            border: 1px solid rgba(0, 174, 239, 0.3);
+            border-radius: 20px;
+            color: #00AEEF;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .prompt-chip:hover {
+            background: rgba(0, 174, 239, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn {
+            padding: 18px 45px;
+            background: linear-gradient(135deg, #00AEEF 0%, #0066CC 100%);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 174, 239, 0.3);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 174, 239, 0.5);
+        }
+
+        .secondary-btn {
+            padding: 18px 45px;
+            background: transparent;
+            border: 2px solid rgba(0, 174, 239, 0.5);
+            border-radius: 30px;
+            color: #00AEEF;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .secondary-btn:hover {
+            background: rgba(0, 174, 239, 0.1);
+            border-color: #00AEEF;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 120px 50px;
+            background: #000;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #00AEEF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.2em;
+            margin-bottom: 60px;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .step {
+            background: rgba(0, 174, 239, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 174, 239, 0.2);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #00AEEF, #0066CC);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .step:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 174, 239, 0.5);
+        }
+
+        .step:hover::before {
+            transform: scaleX(1);
+        }
+
+        .step-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .step h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #00AEEF;
+        }
+
+        .step p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 120px 50px;
+            background: radial-gradient(circle at 50% 50%, #001a33 0%, #000 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(0, 174, 239, 0.05);
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 174, 239, 0.2);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 174, 239, 0.5);
+            box-shadow: 0 20px 50px rgba(0, 174, 239, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        /* Data Sources Section */
+        .data-sources {
+            padding: 100px 50px;
+            background: #000;
+            text-align: center;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 40px auto 0;
+        }
+
+        .data-item {
+            background: rgba(0, 174, 239, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 174, 239, 0.2);
+            transition: all 0.3s;
+        }
+
+        .data-item:hover {
+            transform: scale(1.05);
+            border-color: rgba(0, 174, 239, 0.5);
+        }
+
+        .data-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .data-item h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #00AEEF;
+        }
+
+        .data-item p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95em;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 120px 50px;
+            background: linear-gradient(135deg, #00AEEF 0%, #0066CC 100%);
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .cta .primary-btn {
+            background: white;
+            color: #0066CC;
+        }
+
+        .cta .primary-btn:hover {
+            box-shadow: 0 15px 50px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 50px 30px;
+            background: #000;
+            border-top: 1px solid rgba(0, 174, 239, 0.2);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        .footer-section h4 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #00AEEF;
+        }
+
+        .footer-section a {
+            display: block;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #00AEEF;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links a {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1em;
+            }
+
+            .section-title {
+                font-size: 2em;
+            }
+
+            .features, .how-it-works, .cta, .data-sources {
+                padding: 60px 20px;
+            }
+
+            .demo-box {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            🎓 Find My Professor
+        </div>
+        <div class="nav-links">
+            <a href="#how-it-works">How It Works</a>
+            <a href="#features">Features</a>
+            <a href="#data">Data Sources</a>
+            <button class="nav-btn">Try It Now</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="floating-orb orb-1"></div>
+            <div class="floating-orb orb-2"></div>
+        </div>
+        <div class="hero-content">
+            <div class="bmcc-badge">✨ POWERED BY BMCC DATA</div>
+            <h1>Find Your Perfect <span class="ai-text">BMCC</span> Professor</h1>
+            <p class="hero-subtitle">AI-powered recommendations based on real ratings, reviews, and student experiences. Just tell us what you're looking for.</p>
+            
+            <div class="demo-box">
+                <div class="demo-label">💬 Try asking the AI:</div>
+                <textarea class="chat-input-demo" rows="3" placeholder="I need an engaging Computer Science professor who explains concepts clearly and isn't too harsh on grading..."></textarea>
+                <div class="example-prompts">
+                    <div class="prompt-chip" onclick="fillPrompt(this)">Easy math professor</div>
+                    <div class="prompt-chip" onclick="fillPrompt(this)">Engaging English teacher</div>
+                    <div class="prompt-chip" onclick="fillPrompt(this)">Fair grader in Biology</div>
+                    <div class="prompt-chip" onclick="fillPrompt(this)">Clear explanations</div>
+                </div>
+            </div>
+
+            <div class="hero-buttons">
+                <button class="primary-btn">Start Finding Professors</button>
+                <button class="secondary-btn">View BMCC Data</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">Three simple steps to find your ideal BMCC professor</p>
+        <div class="steps">
+            <div class="step">
+                <div class="step-icon">💭</div>
+                <h3>Describe Your Needs</h3>
+                <p>Tell our AI what you're looking for in natural language. No complicated filters—just chat like you're talking to a friend.</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">🤖</div>
+                <h3>AI Analysis</h3>
+                <p>Our intelligent system analyzes BMCC professor ratings, reviews, difficulty scores, and student feedback to understand your preferences.</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">🎯</div>
+                <h3>Get Matches</h3>
+                <p>Receive personalized professor recommendations with detailed insights on why they're a good fit for you based on real data.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Sources -->
+    <section class="data-sources" id="data">
+        <h2 class="section-title">Powered by Real BMCC Data</h2>
+        <p class="section-subtitle">Our AI analyzes comprehensive information to give you the best recommendations</p>
+        <div class="data-grid">
+            <div class="data-item">
+                <div class="data-icon">⭐</div>
+                <h4>Overall Ratings</h4>
+                <p>Aggregate scores from student evaluations</p>
+            </div>
+            <div class="data-item">
+                <div class="data-icon">📊</div>
+                <h4>Difficulty Levels</h4>
+                <p>Course difficulty and workload assessments</p>
+            </div>
+            <div class="data-item">
+                <div class="data-icon">💬</div>
+                <h4>Student Reviews</h4>
+                <p>Written feedback and detailed experiences</p>
+            </div>
+            <div class="data-item">
+                <div class="data-icon">📚</div>
+                <h4>Course Info</h4>
+                <p>Subject areas and teaching styles</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <h2 class="section-title">Why Choose Find My Professor?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Smart AI Matching</h3>
+                <p>Advanced natural language processing understands exactly what you're looking for, even from casual descriptions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎓</div>
+                <h3>BMCC-Specific Data</h3>
+                <p>Exclusively focused on Borough of Manhattan Community College professors and courses for accurate results.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Instant Results</h3>
+                <p>Get personalized recommendations in seconds—no need to browse through hundreds of profiles manually.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>Data-Driven Insights</h3>
+                <p>Every recommendation backed by real ratings, reviews, and statistical analysis from actual students.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Refine Your Search</h3>
+                <p>Ask follow-up questions to narrow down results and find the absolutely perfect professor for your needs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Personalized Explanations</h3>
+                <p>Understand why each professor is recommended with detailed reasoning based on your specific criteria.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2>Ready to Find Your Perfect Professor?</h2>
+        <p>Join BMCC students making smarter course decisions with AI-powered recommendations</p>
+        <button class="primary-btn">Get Started Free →</button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Find My Professor</h4>
+                <p style="color: rgba(255, 255, 255, 0.6);">AI-powered professor recommendations for BMCC students, helping you make informed decisions about your education.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#">Search Professors</a>
+                <a href="#">How It Works</a>
+                <a href="#">BMCC Data Sources</a>
+                <a href="#">About Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="#">FAQ</a>
+                <a href="#">Student Guide</a>
+                <a href="#">AI Technology</a>
+                <a href="#">Contact Support</a>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Data Usage</a>
+                <a href="#">Disclaimer</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Find My Professor. Built for BMCC Students. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Fill prompt from chip clicks
+        function fillPrompt(chip) {
+            const textarea = document.querySelector('.chat-input-demo');
+            const prompts = {
+                'Easy math professor': 'I need an easy math professor who is patient and good at explaining difficult concepts.',
+                'Engaging English teacher': 'Looking for an engaging English professor who makes classes interesting and encourages discussion.',
+                'Fair grader in Biology': 'I want a Biology professor who grades fairly and provides clear expectations for assignments.',
+                'Clear explanations': 'Find me a professor who gives clear explanations and is available to help students outside of class.'
+            };
+            textarea.value = prompts[chip.textContent] || chip.textContent;
+            textarea.focus();
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Button animations
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.textContent.includes('Start') || this.textContent.includes('Try') || this.textContent.includes('Get Started')) {
+                    alert('🎓 Welcome to Find My Professor! The AI chatbot will help you find the perfect BMCC professor based on your preferences.');
+                }
+            });
+        });
+
+        // Parallax effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const orbs = document.querySelectorAll('.floating-orb');
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 0.3;
+                orb.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Demo textarea auto-resize
+        const textarea = document.querySelector('.chat-input-demo');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    </script>
+</body>
+</html>
